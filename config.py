@@ -51,7 +51,7 @@ THRESHOLD_WEI: int = 1_500_000_000_000_000  # 0.0015 * 10^18
 CHECK_INTERVAL_MINUTES: int = 5
 
 # === ABSTRACT NETWORK ===
-ABSTRACT_RPC_URL: str = "https://api.abs.xyz"
+ABSTRACT_RPC_URL: str = "https://api.mainnet.abs.xyz"
 ABSTRACT_CHAIN_ID: int = 2741
 
 # === SLACK ===
