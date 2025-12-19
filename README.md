@@ -1,43 +1,47 @@
 # Abstract Wallet Monitor
 
-Система моніторингу балансів ETH на гаманцях у мережі Abstract L2 з автоматичними Slack-алертами.
+ETH balance monitoring system for wallets on Abstract L2 network with automatic Slack alerts.
 
-## 🎯 Функціонал
+## 🎯 Features
 
-- Моніторинг 6 гаманців кожні 5 хвилин
-- Slack DM алерт при балансі < 0.0015 ETH
-- Алерт про відновлення балансу
-- Таблиця статусів при запуску
+- Monitors 6 wallets every 5 minutes
+- Slack DM alert when balance < 0.0015 ETH
+- Recovery alert when balance is restored
+- Status table on startup
 
-## 🚀 Деплой на Railway (5 хвилин)
+## 🚀 Quick Start
 
-### Крок 1: GitHub
-1. Створи новий репозиторій на GitHub
-2. Завантаж усі файли з цієї папки
+### Option 1: Local Setup
 
-### Крок 2: Railway
-1. Зайди на https://railway.app
-2. Залогінся через GitHub
-3. Натисни **"New Project"**
-4. Вибери **"Deploy from GitHub repo"**
-5. Обери свій репозиторій
+```bash
+# Clone repository
+git clone https://github.com/AceKonstantin/abstract-wallet-monitor.git
+cd abstract-wallet-monitor
 
-### Крок 3: Змінні середовища
-1. У Railway відкрий свій проєкт
-2. Перейди в **Variables**
-3. Додай:
+# Install dependencies
+pip3 install -r requirements.txt
+
+# Set environment variable and run
+export SLACK_BOT_TOKEN="your-slack-bot-token"
+python3 main.py
+```
+
+### Option 2: Railway Deploy
+
+1. Go to https://railway.app
+2. Login with GitHub
+3. Click **"New Project"** → **"Deploy from GitHub repo"**
+4. Select your repository
+5. Go to **Variables** → Add:
    ```
-   SLACK_BOT_TOKEN = <твій_токен_зі_Slack_API>
+   SLACK_BOT_TOKEN = <your-slack-bot-token>
    ```
+6. Deploy will start automatically
 
-### Крок 4: Готово!
-Railway автоматично задеплоїть і запустить моніторинг.
-Перевір **Logs** — має бути "Monitor started".
+## 📊 Monitored Wallets
 
-## 📊 Гаманці
-
-| Гаманець | Адреса |
-|----------|--------|
+| Wallet | Address |
+|--------|---------|
 | Settler Wallet | `0xA3f8c5E0037f9f70b38d5140542432f40BcE71CB` |
 | Organizer Admin #1 | `0xcd835fa14e546f55b0e4b4fcfccce6dc756ae3d5` |
 | Organizer Admin #2 | `0x08c83c4bf828c846f062d8bc6ddb02101e67e81c` |
@@ -45,16 +49,34 @@ Railway автоматично задеплоїть і запустить мон
 | Organizer Admin #4 | `0xcff06e5c3838c8fabf5b53f8a69ef943f94e07f3` |
 | Organizer Admin #5 | `0x662dd356442943a34a83ad0f18067875dfc72474` |
 
-## ⚙️ Параметри
+## ⚙️ Configuration
 
-| Параметр | Значення |
-|----------|----------|
-| Поріг алерту | 0.0015 ETH |
-| Інтервал перевірки | 5 хвилин |
-| RPC | https://api.abs.xyz |
+| Parameter | Value |
+|-----------|-------|
+| Alert threshold | 0.0015 ETH |
+| Check interval | 5 minutes |
+| RPC | https://api.mainnet.abs.xyz |
 
-## 🔔 Типи алертів
+## 🔔 Alert Types
 
-- 🔴 **НИЗЬКИЙ БАЛАНС** — баланс впав нижче порогу
-- ✅ **БАЛАНС ВІДНОВЛЕНО** — баланс повернувся вище порогу
-- ⚠️ **ПОМИЛКА МОНІТОРИНГУ** — RPC недоступний 15+ хвилин
+- 🔴 **LOW BALANCE** — balance dropped below threshold
+- ✅ **BALANCE RECOVERED** — balance restored above threshold
+- ⚠️ **MONITORING ERROR** — RPC unavailable for 15+ minutes
+
+## 🔧 Getting Slack Bot Token
+
+1. Go to https://api.slack.com/apps
+2. Click **"Create New App"** → **"From scratch"**
+3. Name: `Wallet Monitor`, Workspace: yours
+4. In left menu: **"OAuth & Permissions"**
+5. In **"Scopes"** → **"Bot Token Scopes"** add:
+   - `chat:write`
+   - `im:write`
+6. Scroll up → **"Install to Workspace"**
+7. Copy **"Bot User OAuth Token"** (starts with `xoxb-`)
+
+## 📝 Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SLACK_BOT_TOKEN` | Yes | Slack Bot OAuth Token |
