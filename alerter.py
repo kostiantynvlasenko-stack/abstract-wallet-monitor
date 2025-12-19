@@ -66,57 +66,57 @@ def send_slack_dm(message: str) -> bool:
 
 def send_low_alert(status: WalletStatus) -> bool:
     """Send low balance alert for a wallet."""
-    message = f"""🔴 *НИЗЬКИЙ БАЛАНС*
+    message = f"""🔴 *LOW BALANCE*
 
-*Гаманець:* {status.name}
-*Адреса:* `{status.address}`
-*Баланс:* {status.balance_eth:.5f} ETH
-*Поріг:* {THRESHOLD_ETH} ETH
+*Wallet:* {status.name}
+*Address:* `{status.address}`
+*Balance:* {status.balance_eth:.5f} ETH
+*Threshold:* {THRESHOLD_ETH} ETH
 
-⚠️ Потрібне поповнення!"""
+⚠️ Top-up required!"""
     
     return send_slack_dm(message)
 
 
 def send_recovery_alert(status: WalletStatus) -> bool:
     """Send balance recovered alert for a wallet."""
-    message = f"""✅ *БАЛАНС ВІДНОВЛЕНО*
+    message = f"""✅ *BALANCE RECOVERED*
 
-*Гаманець:* {status.name}
-*Адреса:* `{status.address}`
-*Баланс:* {status.balance_eth:.5f} ETH
+*Wallet:* {status.name}
+*Address:* `{status.address}`
+*Balance:* {status.balance_eth:.5f} ETH
 
-Гаманець знову в нормі."""
+Wallet is back to normal."""
     
     return send_slack_dm(message)
 
 
 def send_status_table(statuses: List[WalletStatus]) -> bool:
     """Send current status table for all wallets."""
-    lines = ["📊 *СТАТУС ГАМАНЦІВ* (Abstract)\n", "```"]
-    lines.append("| Гаманець                    | Баланс (ETH) | Статус |")
-    lines.append("|-----------------------------|--------------|--------|")
+    lines = ["📊 *WALLET STATUS* (Abstract)\n", "```"]
+    lines.append("| Wallet                      | Balance (ETH) | Status |")
+    lines.append("|-----------------------------|---------------|--------|")
     
     for s in statuses:
         status_icon = "🔴" if s.is_low else "✅"
         name_padded = s.name[:27].ljust(27)
-        balance_str = f"{s.balance_eth:.5f}".rjust(12)
+        balance_str = f"{s.balance_eth:.5f}".rjust(13)
         lines.append(f"| {name_padded} | {balance_str} | {status_icon}     |")
     
     lines.append("```")
-    lines.append(f"\nПоріг: {THRESHOLD_ETH} ETH")
-    lines.append(f"Наступна перевірка: через {CHECK_INTERVAL_MINUTES} хв")
+    lines.append(f"\nThreshold: {THRESHOLD_ETH} ETH")
+    lines.append(f"Next check: in {CHECK_INTERVAL_MINUTES} min")
     
     return send_slack_dm("\n".join(lines))
 
 
 def send_rpc_error_alert() -> bool:
     """Send RPC connectivity error alert after prolonged failures."""
-    message = """⚠️ *ПОМИЛКА МОНІТОРИНГУ*
+    message = """⚠️ *MONITORING ERROR*
 
-Не вдалося підключитися до Abstract RPC протягом 15 хвилин.
-Моніторинг тимчасово не працює.
+Failed to connect to Abstract RPC for 15 minutes.
+Monitoring is temporarily down.
 
-Перевірте статус мережі або RPC endpoint."""
+Please check network status or RPC endpoint."""
     
     return send_slack_dm(message)
